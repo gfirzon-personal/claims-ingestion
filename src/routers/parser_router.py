@@ -21,7 +21,7 @@ def get_headers(response: Response):
     except Exception as e: 
         response.status_code = 500
         return {"error": str(e)}    
-    
+   
 @router.get("/data/")
 @router.get("/data")
 def get_data(response: Response):
