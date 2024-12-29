@@ -1,2 +1,3 @@
 from .BatchCsvParsingService import BatchCsvParsingService
 from .IndexSchemaService import IndexSchemaService
+from .IndexLoadingService import IndexLoadingService

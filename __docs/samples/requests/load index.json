@@ -1,0 +1,4 @@
+{
+    "index_name": "test-index",
+    "url-not-part-of-request": "http://localhost:8000/index-data/"
+}
