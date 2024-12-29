@@ -24,3 +24,7 @@ pipenv --rm
 ```sh
 pipenv install
 ```
+
+```sh
+pipenv install sentence-transformers
+```

@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import index_schema_router, index_data_router, parser_router
+from routers import (index_schema_router, 
+                     index_data_router, 
+                     testing_router,
+                     parser_router)
 
 app = FastAPI(title = "dedup api")
 
@@ -15,6 +18,7 @@ app.add_middleware(
  
 app.include_router(index_schema_router.router, prefix = "/index-schema", tags = ["index-schema"])
 app.include_router(index_data_router.router, prefix = "/index-data", tags = ["index-data"])
+app.include_router(testing_router.router, prefix = "/testing", tags = ["testing"])
 app.include_router(parser_router.router, prefix = "/parser", tags = ["parser"])
 
 if __name__ == "__main__":

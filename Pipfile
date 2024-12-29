@@ -9,6 +9,7 @@ uvicorn = "*"
 requests = "*"
 python-dotenv = "*"
 azure-search-documents = "*"
+sentence-transformers = "*"
 
 [dev-packages]
 

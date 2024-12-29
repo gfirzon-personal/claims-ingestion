@@ -19,11 +19,16 @@ def load_index(request: LoadIndexRequest, response: Response):
             {"id": "2", "content": "This is the second document."}
         ]
         
-        IndexLoadingService().load(
+        result = IndexLoadingService().load(
             request.index_name, 
             documents)
         
         response.status_code = 201
-        return {"message": "Index loaded successfully", "index_name": request.index_name}
+        return {
+            "message": "Index loaded successfully", 
+            "index_name": request.index_name,
+            "result": result
+            }
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
