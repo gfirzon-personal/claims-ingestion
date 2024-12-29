@@ -7,6 +7,8 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 requests = "*"
+python-dotenv = "*"
+azure-search-documents = "*"
 
 [dev-packages]
 

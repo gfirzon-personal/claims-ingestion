@@ -1,6 +1,11 @@
+```sh
 pipenv --version
+```
 
+Install requirements using req
+```sh
 pipenv install -r requirements.txt
+```
 
 ```sh
 pipenv shell
@@ -9,4 +14,13 @@ pipenv shell
 Displays a dependency graph of all installed packages in the Pipenv environment
 ```sh
 pipenv graph
+```
+
+Delete the existing virtual environment:
+```sh
+pipenv --rm
+```
+
+```sh
+pipenv install
 ```
