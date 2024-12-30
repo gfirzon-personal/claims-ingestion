@@ -1,0 +1,22 @@
+fields
+
+Field Name
+_____________________________
+PrescriptionRefNo
+PatientFirstName
+PatientLastName
+PatientDOB
+PrescriberID
+ProductServiceID
+QuantityDispensed
+DateRxWritten
+DateOfService
+DaysSupply
+FillNumber
+BIN
+ProcessorControlNo
+GroupNo
+TransactionCode
+OtherCoverageCode
+PatientPayAmount
+TotalAmountPaid
