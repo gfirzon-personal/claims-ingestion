@@ -41,4 +41,7 @@ class IndexSchemaService:
         )
 
         index = SearchIndex(name=index_name, fields=fields, vector_search=vector_search)
-        self.client.create_index(index)    
+        self.client.create_index(index)  
+
+    def delete_index(self, index_name: str):
+        self.client.delete_index(index_name)          

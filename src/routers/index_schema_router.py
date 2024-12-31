@@ -25,3 +25,16 @@ def create_item(request: CreateIndexRequest, response: Response):
         return {"message": "Index created successfully", "index_name": request.index_name}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.delete("/drop/{index_name}")
+def create_item(index_name: str, response: Response):
+    try:
+        if not index_name:
+            raise HTTPException(status_code=400, detail="Invalid input")
+        
+        IndexSchemaService().delete_index(index_name)
+        
+        response.status_code = 201
+        return {"message": "Index deleted successfully", "index_name": index_name}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))    
