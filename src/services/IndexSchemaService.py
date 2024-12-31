@@ -23,7 +23,8 @@ class IndexSchemaService:
         
         fields = [
             SimpleField(name="id", type=SearchFieldDataType.String, key=True),
-            SearchableField(name="content", type=SearchFieldDataType.String),
+            #SearchableField(name="content", type=SearchFieldDataType.String),
+            SearchableField(name="content", type=SearchFieldDataType.String, filterable=True),  # Make 'content' both searchable and filterable
             SearchField(name="content_vector", 
                         type=SearchFieldDataType.Collection(SearchFieldDataType.Single),
                         searchable=True, 

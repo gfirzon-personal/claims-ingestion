@@ -1,0 +1,1 @@
+[Add a filter in a vector query in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-filters?tabs=filter-2024-07-01)
