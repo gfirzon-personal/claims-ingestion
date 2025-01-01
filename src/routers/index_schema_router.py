@@ -10,6 +10,20 @@ class CreateIndexRequest(BaseModel):
     vector_search_profile_name: str
     algorithm_configuration_name: str
 
+#--------------------------------------------------------------------------------
+@router.get("/")
+def create_item(response: Response):
+    try:
+        indexes = IndexSchemaService().list_indexes()
+        
+        response.status_code = 201
+        return {
+            "result": indexes
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+#--------------------------------------------------------------------------------
 @router.post("/")
 def create_item(request: CreateIndexRequest, response: Response):
     try:

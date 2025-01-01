@@ -13,10 +13,12 @@ from azure.search.documents.indexes.models import (
 
 from factories.SearchIndexClientFactory import SearchIndexClientFactory
 
+#--------------------------------------------------------------------------------
 class IndexSchemaService:
     def __init__(self):
         self.client:SearchIndexClient = SearchIndexClientFactory.create_search_index_client()
-   
+
+    #--------------------------------------------------------------------------------
     def create_index_with_vector_field(self, index_name:str, vector_search_profile_name:str, algorithm_configuration_name:str):
         #vector_search_dimensions = 1536
         vector_search_dimensions = 384
@@ -43,5 +45,10 @@ class IndexSchemaService:
         index = SearchIndex(name=index_name, fields=fields, vector_search=vector_search)
         self.client.create_index(index)  
 
+    #--------------------------------------------------------------------------------
     def delete_index(self, index_name: str):
-        self.client.delete_index(index_name)          
+        self.client.delete_index(index_name)       
+
+    #--------------------------------------------------------------------------------
+    def list_indexes(self):
+        return list(self.client.list_indexes())
