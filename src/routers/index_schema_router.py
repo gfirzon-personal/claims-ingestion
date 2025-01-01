@@ -40,6 +40,7 @@ def create_item(request: CreateIndexRequest, response: Response):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+#--------------------------------------------------------------------------------
 @router.delete("/drop/{index_name}")
 def create_item(index_name: str, response: Response):
     try:
