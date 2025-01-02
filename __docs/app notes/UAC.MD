@@ -13,7 +13,7 @@ DateRxWritten
 DateOfService
 DaysSupply
 FillNumber
-BIN -> 
+BIN -> BINNumber
 ProcessorControlNo
 GroupNo
 TransactionCode

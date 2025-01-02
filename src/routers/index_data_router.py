@@ -7,21 +7,17 @@ router = APIRouter()
 
 class LoadIndexRequest(BaseModel):
     index_name: str
+    index_type: str
 
 @router.post("/")
 def load_index(request: LoadIndexRequest, response: Response):
     try:
-        if not request.index_name :
-            raise HTTPException(status_code=400, detail="Invalid input")
-        
-        documents = [
-            {"id": "1", "content": "This is the first document."},
-            {"id": "2", "content": "This is the second document."}
-        ]
+        if not request.index_name or not request.index_type:
+            raise HTTPException(status_code=400, detail="Invalid input")        
         
         result = IndexLoadingService().load(
             request.index_name, 
-            documents)
+            request.index_type)
         
         response.status_code = 201
         return {

@@ -13,7 +13,7 @@ class CreateIndexRequest(BaseModel):
 
 #--------------------------------------------------------------------------------
 @router.get("/")
-def create_item(response: Response):
+def list_indexes(response: Response):
     try:
         indexes = IndexSchemaService().list_indexes()
         
@@ -44,7 +44,7 @@ def create_item(request: CreateIndexRequest, response: Response):
     
 #--------------------------------------------------------------------------------
 @router.delete("/drop/{index_name}")
-def create_item(index_name: str, response: Response):
+def delete_index(index_name: str, response: Response):
     try:
         if not index_name:
             raise HTTPException(status_code=400, detail="Invalid input")
