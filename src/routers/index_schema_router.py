@@ -7,6 +7,7 @@ router = APIRouter()
 
 class CreateIndexRequest(BaseModel):
     index_name: str
+    index_type: str
     vector_search_profile_name: str
     algorithm_configuration_name: str
 
@@ -27,11 +28,12 @@ def create_item(response: Response):
 @router.post("/")
 def create_item(request: CreateIndexRequest, response: Response):
     try:
-        if not request.index_name or not request.vector_search_profile_name or not request.algorithm_configuration_name:
+        if not request.index_name or not request.index_type or not request.vector_search_profile_name or not request.algorithm_configuration_name:
             raise HTTPException(status_code=400, detail="Invalid input")
         
         IndexSchemaService().create_index_with_vector_field(
-            request.index_name, 
+            request.index_name,
+            request.index_type,
             request.vector_search_profile_name, 
             request.algorithm_configuration_name)
         
