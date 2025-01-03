@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Response, HTTPException
+from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 
 from services import EmbeddingsService, StorageService
@@ -53,7 +54,7 @@ def list_containers(response: Response):
 #------------------------------------------------------------------------------------------------
 @router.get("/storage/blobs/{container_name}")
 @router.get("/storage/blobs/{container_name}/")
-def list_containers(container_name: str, response: Response):
+def list_blobs(container_name: str, response: Response):
     try:
         container_names = StorageService().list_files_in_container(container_name)
 
@@ -61,4 +62,28 @@ def list_containers(container_name: str, response: Response):
         return container_names
     except Exception as e: 
         response.status_code = 500
-        return {"error": str(e)}           
+        return {"error": str(e)}        
+
+#------------------------------------------------------------------------------------------------
+@router.get("/storage/blobs/{container_name}/read/{blob_name}")
+@router.get("/storage/blobs/{container_name}/read/{blob_name}/")
+def read_blob_file(container_name: str, blob_name: str, response: Response):
+    try:
+        contents = StorageService().read_blob_file(container_name, blob_name)
+
+        response.status_code = 200
+        return contents
+    except Exception as e: 
+        response.status_code = 500
+        return {"error": str(e)}     
+
+@router.get("/storage/blobs/{container_name}/stream/{blob_name}")
+@router.get("/storage/blobs/{container_name}/stream/{blob_name}/")
+def stream_blob_file(container_name: str, blob_name: str, response: Response):
+    try:
+        file_stream = StorageService().stream_blob_file(container_name, blob_name)
+        response.status_code = 200
+        return StreamingResponse(file_stream, media_type="application/octet-stream")
+    except Exception as e:
+        response.status_code = 500
+        return {"error": str(e)}            
