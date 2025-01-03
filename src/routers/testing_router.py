@@ -8,6 +8,7 @@ router = APIRouter()
 class EmbedRequest(BaseModel):
     text: str
 
+#------------------------------------------------------------------------------------------------
 @router.post("/embeddings")
 def test_embeddings(request: EmbedRequest, response: Response):
     try:
@@ -20,7 +21,8 @@ def test_embeddings(request: EmbedRequest, response: Response):
         return {"message": "Embedded successfully", "embeddings": embeddings.tolist()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#------------------------------------------------------------------------------------------------
 @router.get("/env/")
 @router.get("/env")
 def get_env_entries(response: Response):
@@ -35,6 +37,7 @@ def get_env_entries(response: Response):
         response.status_code = 500
         return {"error": str(e)}       
 
+#------------------------------------------------------------------------------------------------
 @router.get("/storage/")
 @router.get("/storage")
 def list_containers(response: Response):
@@ -45,4 +48,17 @@ def list_containers(response: Response):
         return container_names
     except Exception as e: 
         response.status_code = 500
-        return {"error": str(e)}         
+        return {"error": str(e)}    
+
+#------------------------------------------------------------------------------------------------
+@router.get("/storage/blobs/{container_name}")
+@router.get("/storage/blobs/{container_name}/")
+def list_containers(container_name: str, response: Response):
+    try:
+        container_names = StorageService().list_files_in_container(container_name)
+
+        response.status_code = 200
+        return container_names
+    except Exception as e: 
+        response.status_code = 500
+        return {"error": str(e)}           
