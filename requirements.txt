@@ -3,4 +3,5 @@ uvicorn
 requests
 python-dotenv
 azure-search-documents
+azure-storage-blob
 sentence-transformers

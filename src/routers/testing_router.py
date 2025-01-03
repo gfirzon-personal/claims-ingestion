@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response, HTTPException
 from pydantic import BaseModel
 
-from services import EmbeddingsService
+from services import EmbeddingsService, StorageService
 
 router = APIRouter()
 
@@ -33,4 +33,16 @@ def get_env_entries(response: Response):
         return config_dict
     except Exception as e: 
         response.status_code = 500
-        return {"error": str(e)}        
+        return {"error": str(e)}       
+
+@router.get("/storage/")
+@router.get("/storage")
+def list_containers(response: Response):
+    try:
+        container_names = StorageService().list_container_names()
+
+        response.status_code = 200
+        return container_names
+    except Exception as e: 
+        response.status_code = 500
+        return {"error": str(e)}         

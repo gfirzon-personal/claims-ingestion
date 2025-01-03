@@ -30,8 +30,15 @@ class IndexLoadingService:
                 #embedding = model.encode(doc["description"]).tolist()
                 #embedding = EmbeddingsService().get_embeddings(doc["content"]).tolist()
 
-                #doc["content_vector"] = embedding  # Add embedding to the document            
+                #doc["content_vector"] = embedding  # Add embedding to the document    
+                
+                # For exact searches, traditional keyword-based search works better. 
+                # However, vector search can complement exact search by finding documents 
+                # with semantically similar meanings even if exact matches are missing.        
 
         result = search_client.upload_documents(documents=documents)
         
         return result
+    
+    def concatenate_doc_values(doc):
+        return ''.join(str(value) for value in doc.values())
