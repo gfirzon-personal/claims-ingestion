@@ -1,0 +1,1 @@
+[Vector , Hybrid, Semantic search with Azure AI Search in 11 minutes](https://www.youtube.com/watch?v=BOPVh-0NM8U)
