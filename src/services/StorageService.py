@@ -2,6 +2,7 @@ from factories.BlobServiceClientFactory import BlobServiceClientFactory
 
 class StorageService:
     def __init__(self):
+        print("Initializing StorageService")
         self.blob_service_client = BlobServiceClientFactory().create()
 
     def list_container_names(self):
@@ -29,9 +30,43 @@ class StorageService:
         # Download the blob content
         blob_data = blob_client.download_blob().readall()
         
-        return blob_data.decode('utf-8')        
+        return blob_data.decode('utf-8')    
+
+    def stream_blob_file(self, container_name, blob_name):    
+        print(f"Streaming blob file: {blob_name} from container: {container_name}")
+        # Get the container client
+        container_client = self.blob_service_client.get_container_client(container_name)   
+        # Get the blob client
+        blob_client = container_client.get_blob_client(blob_name) 
+        # Download blob content
+
+        # Download blob content
+        downloader = blob_client.download_blob()
+        # Option 1: Read all content at once
+        content = downloader.readall()
+        #print(content)        
     
-    def stream_blob_file(self, container_name, blob_name):
+    def stream_blob_file2(self, container_name, blob_name):
+        print(f"Streaming blob file: {blob_name} from container: {container_name}")
+
         blob_client = self.blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        stream = blob_client.download_blob()
-        return stream.chunks()    
+        # Ensure the blob exists before downloading
+        if blob_client.exists():
+            # Download blob content
+            downloader = blob_client.download_blob()
+            # Option 1: Read all content at once
+            content = downloader.readall().decode('utf-8')   
+            print(content)
+            # with blob_client.download_blob() as stream:
+            #     for line in stream.chunks():
+            #         print(line.decode("utf-8"))  
+        else:
+            print("Blob does not exist!")                          
+
+        # blob_client = self.blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+        # stream = blob_client.download_blob()
+        # return stream
+        
+        # returning an iterator that yields chunks of data 
+        # from a blob in Azure Blob Storage.
+        #return stream.chunks()    
