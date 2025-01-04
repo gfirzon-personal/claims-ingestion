@@ -1,3 +1,9 @@
+Request to search for record in existing Azure AI Search service index
+
+Url: http://localhost:8000/searching/record-text-search
+Method: POST
+
+```json
 {
     "index_name": "pharma-index",
     "record": {
@@ -19,6 +25,6 @@
         "OtherCoverageCode": "NC",
         "PatientPayAmount": "",
         "TotalAmountPaid": "355.13"
-    },
-    "url-not-for-body": "http://localhost:8000/searching/record-text-search"
+    }
 }
+```

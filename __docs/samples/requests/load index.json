@@ -1,7 +1,0 @@
-{
-    "index_name": "pharma-index",
-    "index_type": "pharma",
-    "container_name": "pharmatest",
-    "blob_name": "generated_batch_sample.csv",
-    "url-not-part-of-request": "http://localhost:8000/index-data/"
-}

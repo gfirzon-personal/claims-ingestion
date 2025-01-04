@@ -1,6 +1,0 @@
-{
-    "index_name": "test-index",
-    "vector_search_profile_name": "pharma-vector-config",
-    "algorithm_configuration_name": "pharma-algorithms-config",
-    "url-not-part-of-request": "http://localhost:8000/index-schema/"
-}
