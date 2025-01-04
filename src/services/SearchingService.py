@@ -3,6 +3,7 @@ import json
 from factories.SearchClientFactory import SearchClientFactory
 from services.EmbeddingsService import EmbeddingsService
 from utils import config
+from models.PharmaRecord import PharmaRecord
 
 class SearchingService:
     def __init__(self):
@@ -28,20 +29,37 @@ class SearchingService:
 
         return query
     
-    def record_search(self, index_name: str, query: str):
+    def record_search(self, index_name: str, record: PharmaRecord):
         search_client = SearchClientFactory().create(index_name)
 
-        #query_filter = f"email eq '{record['email']}' and name eq '{record['name']}'"
-        query_filter = f"content eq '{query}'"
+        #query_filter = f"PrescriptionRefNo eq 'I86K4NBSAHHF' and PatientFirstName eq ''"
+        query_filter = self.build_query_filter(record)
+        #print(query_filter)
         results = search_client.search(search_text="", filter=query_filter)
 
         # Perform a full-text search on the 'content' field
         #results = search_client.search(search_text=query, search_fields=["content"])
 
+        result_count = 0
+        service_results = []
         for result in results:
-            print("Found:", result)
+            #print("Found:", result)
+            result_count += 1
+            service_results.append(result)
 
-        return query    
+        return {
+            "query_filter": query_filter,
+            "result_count": result_count,
+            "results": service_results
+        }   
+    
+    def build_query_filter(self, record: PharmaRecord):
+        query_filter = " and ".join([
+            f"{field} eq '{getattr(record, field)}'" if getattr(record, field) is not None else f"{field} eq null"
+            for field in record.model_fields
+        ])
+
+        return query_filter
 
     #---------------------------------------------------------------------------------------
     def search_vectorized(self, index_name: str, query: str):
