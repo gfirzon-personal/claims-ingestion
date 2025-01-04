@@ -2,15 +2,20 @@ from fastapi import APIRouter, Response, HTTPException
 from pydantic import BaseModel
 
 from services import SearchingService
+from models.PharmaRecord import PharmaRecord
 
 router = APIRouter()
 
 class SimpleSearchRequest(BaseModel):
     index_name: str
-    text: str
+    text: str 
+
+class RecordSearchRequest(BaseModel):
+    index_name: str
+    record: PharmaRecord    
 
 @router.post("/simple-search")
-def test_embeddings(request: SimpleSearchRequest, response: Response):
+def simple_search(request: SimpleSearchRequest, response: Response):
     try:
         if not request.text or not request.index_name:
             raise HTTPException(status_code=400, detail="Invalid input")
@@ -24,3 +29,20 @@ def test_embeddings(request: SimpleSearchRequest, response: Response):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.post("/record-text-search")
+def record_text_search(request: RecordSearchRequest, response: Response):
+    try:
+        if not request.record or not request.index_name:
+            raise HTTPException(status_code=400, detail="Invalid input")
+
+        #result = SearchingService().search_vectorized(request.index_name, request.text)
+        result = request.record
+        
+        response.status_code = 201
+        return {
+            "message": f"Searched successfully",
+            "response": result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))    

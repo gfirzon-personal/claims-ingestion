@@ -27,6 +27,21 @@ class SearchingService:
             print("Found:", result)
 
         return query
+    
+    def record_search(self, index_name: str, query: str):
+        search_client = SearchClientFactory().create(index_name)
+
+        #query_filter = f"email eq '{record['email']}' and name eq '{record['name']}'"
+        query_filter = f"content eq '{query}'"
+        results = search_client.search(search_text="", filter=query_filter)
+
+        # Perform a full-text search on the 'content' field
+        #results = search_client.search(search_text=query, search_fields=["content"])
+
+        for result in results:
+            print("Found:", result)
+
+        return query    
 
     #---------------------------------------------------------------------------------------
     def search_vectorized(self, index_name: str, query: str):
