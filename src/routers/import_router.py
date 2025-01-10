@@ -23,7 +23,7 @@ def import_file(request: ImportRequest, response: Response):
             raise HTTPException(status_code=400, detail="Invalid input")   
 
         result = ImportService().import_file(
-            # request.index_name, 
+            request.index_name, 
             # request.index_type,
             container_name=request.container_name,
             blob_name=request.blob_name

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Any, Dict
 
 class PharmaRecord(BaseModel):
     PrescriptionRefNo: str
@@ -20,3 +20,7 @@ class PharmaRecord(BaseModel):
     OtherCoverageCode: str
     PatientPayAmount: str
     TotalAmountPaid: str
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "PharmaRecord":
+        return cls(**data)    
