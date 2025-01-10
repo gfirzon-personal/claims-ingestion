@@ -4,3 +4,4 @@ from .IndexLoadingService import IndexLoadingService
 from .EmbeddingsService import EmbeddingsService
 from .SearchingService import SearchingService
 from .StorageService import StorageService
+from .ImportService import ImportService
