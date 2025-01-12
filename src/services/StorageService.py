@@ -70,3 +70,22 @@ class StorageService:
         # returning an iterator that yields chunks of data 
         # from a blob in Azure Blob Storage.
         #return stream.chunks()    
+
+    def append_block(self, container_name, blob_name, block: str):
+        # Get the container client
+        container_client = self.blob_service_client.get_container_client(container_name)
+        
+        # Get the blob client
+        blob_client = container_client.get_blob_client(blob_name)
+
+        # Create the blob if it doesn't exist
+        if not blob_client.exists():
+            blob_client.create_append_blob()
+
+        #print(f"Appending block to blob: {block}")
+    
+        # Append data to the blob
+        # Append data to the blob
+        data_to_append = "This is a new line of data.\n"
+        #blob_client.append_block(data_to_append)         
+        blob_client.append_block(block)         

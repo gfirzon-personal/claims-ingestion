@@ -6,20 +6,21 @@ from utils import config
 from models.PharmaRecord import PharmaRecord
 
 class SearchingService:
-    def __init__(self):
+    """Service to search data in the index"""
+    
+    def __init__(self, index_name: str):
         self.embeddings_service = EmbeddingsService()
+        self.search_client = SearchClientFactory().create(index_name)
 
         config_dict = config.load_env_as_dict('.env')
         self.search_service_endpoint = config_dict['SEARCH_SERVICE_ENDPOINT']
         self.search_service_api_version = config_dict['SEARCH_SERVICE_API_VERSION']
         self.search_service_key = config_dict['SEARCH_SERVICE_KEY']
 
-    def search(self, index_name: str, query: str):
-        search_client = SearchClientFactory().create(index_name)
-
+    def search(self, query: str):
         #query_filter = f"email eq '{record['email']}' and name eq '{record['name']}'"
         query_filter = f"content eq '{query}'"
-        results = search_client.search(search_text="", filter=query_filter)
+        results = self.search_client.search(search_text="", filter=query_filter)
 
         # Perform a full-text search on the 'content' field
         #results = search_client.search(search_text=query, search_fields=["content"])
@@ -29,13 +30,13 @@ class SearchingService:
 
         return query
     
-    def record_search(self, index_name: str, record: PharmaRecord):
-        search_client = SearchClientFactory().create(index_name)
+    def record_search(self, record: PharmaRecord):
+        """Search for a record in the index (which has been setup in ctor)"""
 
         #query_filter = f"PrescriptionRefNo eq 'I86K4NBSAHHF' and PatientFirstName eq ''"
         query_filter = self.build_query_filter(record)
         #print(query_filter)
-        results = search_client.search(search_text="", filter=query_filter)
+        results = self.search_client.search(search_text="", filter=query_filter)
 
         # Perform a full-text search on the 'content' field
         #results = search_client.search(search_text=query, search_fields=["content"])
