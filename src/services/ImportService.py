@@ -69,9 +69,9 @@ class ImportService:
         # Generate a timestamp
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         out_dupe_blob_name = f"out_dupes_{timestamp}.csv"        
-        out_new_blob_name = f"out_new_{timestamp}.csv"        
+        out_new_blob_name = f"out_new_{timestamp}.csv"
 
-        StorageService().append_block(out_container_name, out_dupe_blob_name, rl["header_line"])
+        header_line = rl["header_line"] + '\n'
         searching_service = SearchingService(index_name)
 
         # Print the count of elements in result_list
@@ -83,7 +83,13 @@ class ImportService:
             pharma_record = PharmaRecord.from_dict(record)
             search_result = searching_service.record_search(pharma_record)  
             #print("search_result count", search_result["result_count"] ) 
-            StorageService().append_block(out_container_name, out_dupe_blob_name, line)
+
+            if search_result["result_count"] == 0:
+                print("new rec found")
+                StorageService().append_block(out_container_name, out_new_blob_name, line, header_line)
+            else:
+                print("dup rec found")
+                StorageService().append_block(out_container_name, out_dupe_blob_name, line, header_line)
 
         return "done"    
        
