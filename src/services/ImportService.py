@@ -3,8 +3,10 @@ from datetime import datetime
 from services import SearchingService
 from models.PharmaRecord import PharmaRecord
 
-from services.StorageService import StorageService
+from services.BlobClientService import BlobClientService
 from services.BatchCsvParsingService import BatchCsvParsingService
+
+# from services import (BlobClientService, BatchCsvParsingService)
 
 from providers.pharma_docs_provider import (
     get_docs, 
@@ -13,55 +15,12 @@ from providers.pharma_docs_provider import (
 
 class ImportService:
     """Service to import data"""
+
     def __init__(self):
         pass
-
-    def import_file_orig(self, index_name: str, container_name: str, blob_name: str):
-        content = StorageService().read_blob_file(container_name, blob_name)
-        data_list = BatchCsvParsingService().get_data_from_content(content)
-        searching_service = SearchingService(index_name)
-
-        filtered_data = self.filter(data_list)
-
-        for doc in filtered_data:
-            doc["id"] = str(uuid.uuid4())  # Add GUID as string to the document
-            
-            pharma_record = PharmaRecord.from_dict(doc)  # Convert doc to PharmaRecord object
-            result = searching_service.record_search(pharma_record)
-            print(result["result_count"])
-
-        return filtered_data    
-
-    def import_file_2(self, index_name: str, container_name: str, blob_name:str):
-        content = StorageService().read_blob_file(container_name, blob_name)
-        file_lines = BatchCsvParsingService().get_data_from_content(content)
-        searching_service = SearchingService(index_name)
-
-        out_container_name = "result-files"
-        # Generate a timestamp
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        out_dupe_blob_name = f"out_dupe_blob_{timestamp}.csv"
-
-        pharma_lines = []
-        for line in file_lines:
-            pharma_record = PharmaRecord.from_dict(line)
-            pharma_lines.append(pharma_record)
-
-            result = searching_service.record_search(pharma_record)   
-            if result["result_count"] > 0:
-                # save record to blob storage for manual review
-                StorageService().append_block(out_container_name, out_dupe_blob_name, line)
-                pass
-            else:
-                # save record to blob storage for manual review
-                pass
-
-            #print(result["result_count"])
-
-        return pharma_lines
     
     def import_file(self, index_name: str, container_name: str, blob_name: str, out_container_name: str):
-        content = StorageService().read_blob_file(container_name, blob_name)
+        content = BlobClientService(container_name, blob_name).read_blob_file()
 
         rl = BatchCsvParsingService().read_all_lines(content)
 
@@ -79,6 +38,9 @@ class ImportService:
         new_rec_count = 0
         dup_rec_count = 0
 
+        dupe_rec_client = BlobClientService(out_container_name, out_dupe_blob_name)
+        new_rec_client = BlobClientService(out_container_name, out_new_blob_name)
+
         for item in rl["result_list"]:
             line = item["line"]
             record = item["record"]
@@ -88,10 +50,10 @@ class ImportService:
 
             if search_result["result_count"] == 0:
                 new_rec_count += 1
-                StorageService().append_block(out_container_name, out_new_blob_name, line, header_line)
+                new_rec_client.append_block(line, header_line)
             else:
                 dup_rec_count += 1
-                StorageService().append_block(out_container_name, out_dupe_blob_name, line, header_line)
+                dupe_rec_client.append_block(line, header_line)
 
         return {
             "new_rec_count": new_rec_count,

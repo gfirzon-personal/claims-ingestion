@@ -73,19 +73,12 @@ class BatchCsvParsingService:
                 "record": record,
                 "line": line
             })
-            #print("line:", line)
-            #print("record:", record)
 
-        print("creating result")
-
-        result = {
+        return {
             "result_list": result_list,
             "header_line": header_line
         }
 
-        print("created result")
-        return result
-        
     def get_data(self, file_path):
         # List to store each record as a dictionary
         data_list = []

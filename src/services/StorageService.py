@@ -24,18 +24,6 @@ class StorageService:
             file_names.append(blob.name)
         return file_names     
 
-    def read_blob_file(self, container_name, blob_name):
-        # Get the container client
-        container_client = self.blob_service_client.get_container_client(container_name)
-        
-        # Get the blob client
-        blob_client = container_client.get_blob_client(blob_name)
-    
-        # Download the blob content
-        blob_data = blob_client.download_blob().readall()
-        
-        return blob_data.decode('utf-8')    
-
     def stream_blob_file(self, container_name, blob_name):    
         print(f"Streaming blob file: {blob_name} from container: {container_name}")
         # Get the container client
@@ -74,18 +62,4 @@ class StorageService:
         # returning an iterator that yields chunks of data 
         # from a blob in Azure Blob Storage.
         #return stream.chunks()    
-
-    def append_block(self, container_name, blob_name, block: str, header_line: str):
-        # Get the container client
-        container_client = self.blob_service_client.get_container_client(container_name)
-        
-        # Get the blob client
-        blob_client = container_client.get_blob_client(blob_name)
-
-        # Create the blob if it doesn't exist
-        if not blob_client.exists():
-            blob_client.create_append_blob()
-            blob_client.append_block(header_line)         
-
-        # Append data to the blob       
-        blob_client.append_block(block)         
+      
