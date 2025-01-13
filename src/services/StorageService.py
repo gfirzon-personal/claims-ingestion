@@ -5,6 +5,10 @@ class StorageService:
         print("Initializing StorageService")
         self.blob_service_client = BlobServiceClientFactory().create()
 
+    def set_container(self, container_name: str):
+        self.container_name = container_name
+        self.container_client = self.blob_service_client.get_container_client(container_name)
+
     def list_container_names(self):
         container_names = []
         containers = self.blob_service_client.list_containers()

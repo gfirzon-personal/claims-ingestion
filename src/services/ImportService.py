@@ -16,7 +16,7 @@ class ImportService:
     def __init__(self):
         pass
 
-    def import_file_orig(self, index_name: str, container_name:str, blob_name:str):
+    def import_file_orig(self, index_name: str, container_name: str, blob_name: str):
         content = StorageService().read_blob_file(container_name, blob_name)
         data_list = BatchCsvParsingService().get_data_from_content(content)
         searching_service = SearchingService(index_name)
@@ -32,7 +32,7 @@ class ImportService:
 
         return filtered_data    
 
-    def import_file_2(self, index_name: str, container_name:str, blob_name:str):
+    def import_file_2(self, index_name: str, container_name: str, blob_name:str):
         content = StorageService().read_blob_file(container_name, blob_name)
         file_lines = BatchCsvParsingService().get_data_from_content(content)
         searching_service = SearchingService(index_name)
@@ -60,12 +60,11 @@ class ImportService:
 
         return pharma_lines
     
-    def import_file(self, index_name: str, container_name:str, blob_name:str):
+    def import_file(self, index_name: str, container_name: str, blob_name: str, out_container_name: str):
         content = StorageService().read_blob_file(container_name, blob_name)
 
         rl = BatchCsvParsingService().read_all_lines(content)
 
-        out_container_name = "result-files"
         # Generate a timestamp
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         out_dupe_blob_name = f"out_dupes_{timestamp}.csv"        
@@ -77,6 +76,9 @@ class ImportService:
         # Print the count of elements in result_list
         #print(f"Count of elements in result_list: {len(rl['result_list'])}")
 
+        new_rec_count = 0
+        dup_rec_count = 0
+
         for item in rl["result_list"]:
             line = item["line"]
             record = item["record"]
@@ -85,13 +87,17 @@ class ImportService:
             #print("search_result count", search_result["result_count"] ) 
 
             if search_result["result_count"] == 0:
-                print("new rec found")
+                new_rec_count += 1
                 StorageService().append_block(out_container_name, out_new_blob_name, line, header_line)
             else:
-                print("dup rec found")
+                dup_rec_count += 1
                 StorageService().append_block(out_container_name, out_dupe_blob_name, line, header_line)
 
-        return "done"    
+        return {
+            "new_rec_count": new_rec_count,
+            "dup_rec_count": dup_rec_count,
+            "total_rec_count": new_rec_count + dup_rec_count
+        }    
        
     def filter(self, data):
         # List of required attributes

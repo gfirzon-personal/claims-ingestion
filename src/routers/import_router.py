@@ -10,6 +10,7 @@ class ImportRequest(BaseModel):
     index_type: str
     container_name: str
     blob_name: str
+    out_container_name: str
     
 @router.post("/process")
 def import_file(request: ImportRequest, response: Response):
@@ -26,12 +27,13 @@ def import_file(request: ImportRequest, response: Response):
             request.index_name, 
             # request.index_type,
             container_name=request.container_name,
-            blob_name=request.blob_name
+            blob_name=request.blob_name,
+            out_container_name=request.out_container_name
             )
         
         response.status_code = 201
         return {
-            "message": "File imported", 
+            "message": f"File {request.blob_name} processed for importing", 
             "result": result
             }
     
