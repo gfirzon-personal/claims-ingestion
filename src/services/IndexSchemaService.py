@@ -13,6 +13,10 @@ class IndexSchemaService:
         self.client:SearchIndexClient = SearchIndexClientFactory.create_search_index_client()
 
     #--------------------------------------------------------------------------------
+    def get_index_statistics(self, index_name: str):
+        return self.client.get_index_statistics(index_name)          
+
+    #--------------------------------------------------------------------------------
     def create_index_with_vector_field(self, 
             index_name:str, 
             index_type:str, 

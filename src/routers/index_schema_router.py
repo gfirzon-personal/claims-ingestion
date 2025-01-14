@@ -23,6 +23,19 @@ def list_indexes(response: Response):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+#--------------------------------------------------------------------------------
+@router.get("/statistics/{index_name}")
+def list_indexes(response: Response, index_name: str):
+    try:
+        stats = IndexSchemaService().get_index_statistics(index_name)
+        
+        response.status_code = 201
+        return {
+            "result": stats
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))    
 
 #--------------------------------------------------------------------------------
 @router.post("/")
