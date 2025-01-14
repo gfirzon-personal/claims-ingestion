@@ -3,6 +3,7 @@ from factories.SearchClientFactory import SearchClientFactory
 from services.EmbeddingsService import EmbeddingsService
 from services.StorageService import StorageService
 from services.BatchCsvParsingService import BatchCsvParsingService
+from services.BlobClientService import BlobClientService
 
 from providers.pharma_docs_provider import (
     get_docs, 
@@ -28,7 +29,7 @@ class IndexLoadingService:
 
                 doc["content_vector"] = embedding  # Add embedding to the document
         else:
-            content = StorageService().read_blob_file(container_name, blob_name)
+            content = BlobClientService(container_name, blob_name).read_blob_file()
             data_list = BatchCsvParsingService().get_data_from_content(content)
             filtered_data = self.filter(data_list)
 

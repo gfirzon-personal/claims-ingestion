@@ -2,7 +2,10 @@ from fastapi import APIRouter, Response, HTTPException
 from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 
-from services import EmbeddingsService, StorageService
+from services import (
+    EmbeddingsService, 
+    StorageService, 
+    BlobClientService)
 
 router = APIRouter()
 
@@ -69,7 +72,7 @@ def list_blobs(container_name: str, response: Response):
 @router.get("/storage/blobs/{container_name}/read/{blob_name}/")
 def read_blob_file(container_name: str, blob_name: str, response: Response):
     try:
-        contents = StorageService().read_blob_file(container_name, blob_name)
+        contents = BlobClientService(container_name, blob_name).read_blob_file()
 
         response.status_code = 200
         return contents
