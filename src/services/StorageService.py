@@ -30,36 +30,16 @@ class StorageService:
         container_client = self.blob_service_client.get_container_client(container_name)   
         # Get the blob client
         blob_client = container_client.get_blob_client(blob_name) 
-        # Download blob content
-
-        # Download blob content
-        downloader = blob_client.download_blob()
-        # Option 1: Read all content at once
-        content = downloader.readall()
-        #print(content)        
+        stream = blob_client.download_blob()
+        return stream.chunks()      
     
     def stream_blob_file2(self, container_name, blob_name):
         print(f"Streaming blob file: {blob_name} from container: {container_name}")
-
-        blob_client = self.blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        # Ensure the blob exists before downloading
-        if blob_client.exists():
-            # Download blob content
-            downloader = blob_client.download_blob()
-            # Option 1: Read all content at once
-            content = downloader.readall().decode('utf-8')   
-            print(content)
-            # with blob_client.download_blob() as stream:
-            #     for line in stream.chunks():
-            #         print(line.decode("utf-8"))  
-        else:
-            print("Blob does not exist!")                          
-
-        # blob_client = self.blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        # stream = blob_client.download_blob()
-        # return stream
-        
-        # returning an iterator that yields chunks of data 
-        # from a blob in Azure Blob Storage.
-        #return stream.chunks()    
+        # Get the container client
+        container_client = self.blob_service_client.get_container_client(container_name)   
+        # Get the blob client
+        blob_client = container_client.get_blob_client(blob_name) 
+        stream = blob_client.download_blob()
+        for chunk in stream.chunks(): 
+            yield chunk
       

@@ -11,6 +11,8 @@ python-dotenv = "*"
 azure-search-documents = "*"
 sentence-transformers = "*"
 azure-storage-blob = "*"
+faker = "*"
+pandas = "*"
 
 [dev-packages]
 

@@ -8,3 +8,4 @@
 
 Python: Activated environment for ~\.virtualenvs\Lesson_on_Package_Management-dTie9ILl\Scripts\python.exe
 GitHub Copilot Chat: Enables use of the copilot-debug command in the terminal.
+

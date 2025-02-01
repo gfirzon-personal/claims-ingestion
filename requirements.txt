@@ -1,7 +1,9 @@
-fastapi
-uvicorn 
-requests
-python-dotenv
 azure-search-documents
 azure-storage-blob
+faker
+fastapi
+pandas
+python-dotenv
+requests
 sentence-transformers
+uvicorn
