@@ -4,11 +4,14 @@ import random
 from tqdm import tqdm
 import uuid
 
+# To run this script
 # pipenv run python __datagen/generator.py
 
 fake = Faker()
-num_records = 2_000_000  # 2 million records
-output_file = "test_data.csv"
+#num_records = 2_000_000  # 2 million records
+#output_file = "test_data_2mil.csv"
+num_records = 300_000  # 300 thousand records
+output_file = "test_data_300k.csv"
 
 # Define the structure of your data
 def generate_data():
@@ -31,4 +34,4 @@ data = [generate_data() for _ in tqdm(range(num_records), desc="Generating Recor
 df = pd.DataFrame(data)
 df.to_csv(output_file, index=False)
 
-print(f"CSV file '{output_file}' with {num_records} records created successfully!")
+print(f"CSV file '{output_file}' with {num_records:,} records created successfully!")

@@ -11,14 +11,21 @@ AZURITE_CONNECTION_STRING = (
     f"BlobEndpoint={config_dict['AZURITE_BLOB_ENDPOINT']};"
 )
 
+use_azurite = config_dict['USE_AZURITE']
+
 class BlobServiceClientFactory:
+    """Factory class to create a BlobServiceClient object"""
     def __init__(self):
-        self.connection_string = config_dict['STORAGE_ACCOUNT_CONNECTIONSTRING']
+        if use_azurite:
+            # Use Azurite settings
+            self.connection_string = AZURITE_CONNECTION_STRING
+        else:
+            # Use Azure storage settings
+            self.connection_string = config_dict['STORAGE_ACCOUNT_CONNECTIONSTRING']
 
     def create(self) -> BlobServiceClient:
         # Create the BlobServiceClient object
-        #blob_service_client = BlobServiceClient.from_connection_string(self.connection_string)
-        blob_service_client = BlobServiceClient.from_connection_string(AZURITE_CONNECTION_STRING)
+        blob_service_client = BlobServiceClient.from_connection_string(self.connection_string)
 
         return blob_service_client
     

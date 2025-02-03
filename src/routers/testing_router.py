@@ -7,6 +7,8 @@ from services import (
     StorageService, 
     BlobClientService)
 
+from handlers import stream_handler
+
 router = APIRouter()
 
 class EmbedRequest(BaseModel):
@@ -95,10 +97,7 @@ def stream_blob_file(container_name: str, blob_name: str, response: Response):
 @router.get("/storage/blobs/{container_name}/stream2/{blob_name}/")
 def stream_blob_file(container_name: str, blob_name: str, response: Response):
     try:
-        # Process each chunk as it arrives
-        for chunk in StorageService().stream_blob_file2(container_name, blob_name):
-            #print(chunk.decode('utf-8', errors='ignore'))  # Decode if it's text
-            print(f"Received chunk of size {len(chunk)}")        
+        stream_handler.process_csv_file(container_name, blob_name)     
 
         response.status_code = 201
         return {

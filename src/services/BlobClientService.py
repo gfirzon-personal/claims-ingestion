@@ -18,6 +18,13 @@ class BlobClientService:
         # Download the blob content
         blob_data = self.blob_client.download_blob().readall()        
         return blob_data.decode('utf-8')    
+    
+    #--------------------------------------------------------------------------------
+    def stream_blob_file(self, container_name, blob_name):
+        print(f"Streaming blob file: {blob_name} from container: {container_name}")
+        stream = self.blob_client.download_blob()
+        for chunk in stream.chunks(): 
+            yield chunk    
 
     #--------------------------------------------------------------------------------
     def append_block(self, block: str, header_line: str):

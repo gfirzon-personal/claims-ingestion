@@ -6,3 +6,4 @@ from .SearchingService import SearchingService
 from .StorageService import StorageService
 from .ImportService import ImportService
 from .BlobClientService import BlobClientService
+from .IndexDataService import IndexDataService
