@@ -10,6 +10,7 @@ class LoadIndexRequest(BaseModel):
     index_type: str
     container_name: str
     blob_name: str
+    stream_mode: bool = True
 
 #--------------------------------------------------------------------------------
 @router.post("/")
@@ -25,7 +26,8 @@ def load_index(request: LoadIndexRequest, response: Response):
             request.index_name, 
             request.index_type,
             container_name=request.container_name,
-            blob_name=request.blob_name
+            blob_name=request.blob_name,
+            stream_mode=request.stream_mode
             )
         
         response.status_code = 201

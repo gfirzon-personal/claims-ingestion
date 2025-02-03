@@ -8,6 +8,7 @@ Method: POST
     "index_name": "pharma-index",
     "index_type": "pharma",
     "container_name": "pharmatest",
-    "blob_name": "generated_batch_sample.csv"
+    "blob_name": "generated_batch_sample.csv",
+    "stream_mode": true
 }
 ```
