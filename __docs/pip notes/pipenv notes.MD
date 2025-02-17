@@ -1,3 +1,9 @@
+https://pypi.org/project/pipenv/#installation
+
+```sh
+pip install pipenv
+```
+
 ```sh
 pipenv --version
 ```

@@ -4,6 +4,7 @@ from routers import (index_schema_router,
                      index_data_router, 
                      import_router,
                      searching_router,
+                     documents_router,
                      testing_router,
                      parser_router)
 
@@ -22,6 +23,7 @@ app.include_router(index_schema_router.router, prefix = "/index-schema", tags = 
 app.include_router(index_data_router.router, prefix = "/index-data", tags = ["index-data"])
 app.include_router(import_router.router, prefix = "/importing", tags = ["importing"])
 app.include_router(searching_router.router, prefix = "/searching", tags = ["searching"])
+app.include_router(documents_router.router, prefix = "/documents", tags = ["documents"])
 app.include_router(testing_router.router, prefix = "/testing", tags = ["testing"])
 app.include_router(parser_router.router, prefix = "/parser", tags = ["parser"])
 

@@ -15,7 +15,7 @@ def get_pharma_search_params(vector_search_profile_name:str, algorithm_configura
     vector_search_dimensions = 384
     
     fields = [
-        SimpleField(name="id", type=SearchFieldDataType.String, key=True),
+        SimpleField(name="id", type=SearchFieldDataType.String, filterable=True, key=True),
         SearchableField(name="PrescriptionRefNo", type=SearchFieldDataType.String, filterable=True),
         SearchableField(name="PatientFirstName", type=SearchFieldDataType.String, filterable=True),
         SearchableField(name="PatientLastName", type=SearchFieldDataType.String, filterable=True),

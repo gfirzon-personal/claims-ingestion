@@ -5,5 +5,6 @@ fastapi
 pandas
 python-dotenv
 requests
+# Sentence Transformers: Multilingual Sentence, Paragraph, and Image Embeddings using BERT & Co.
 sentence-transformers
 uvicorn
