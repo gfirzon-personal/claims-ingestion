@@ -1,3 +1,4 @@
+import uuid
 from factories.SearchClientFactory import SearchClientFactory
 
 class IndexDataService:
@@ -5,7 +6,7 @@ class IndexDataService:
     def __init__(self, index_name: str):
         self.search_client = SearchClientFactory().create(index_name)
         
-
+    #--------------------------------------------------------------------------------
     def delete_all_docs(self):
         """Delete all documents from the index"""
         key_field_name = "id"
@@ -32,6 +33,7 @@ class IndexDataService:
 
         return count    
     
+    #--------------------------------------------------------------------------------
     def get_all_docs(self):
         """Retrieve all documents from the index"""
         all_docs = []
@@ -48,6 +50,7 @@ class IndexDataService:
         print(f"No document found with id '{doc_id}'")
         return None
     
+    #--------------------------------------------------------------------------------
     def delete_doc_by_id(self, doc_id: str):
         """Delete a document from the index by ID"""
         key_field_name = "id"
@@ -69,3 +72,11 @@ class IndexDataService:
         else:
             print(f"No document found with id '{doc_id}'")
             return 0    
+    #--------------------------------------------------------------------------------
+    def add_document(self, request: dict):
+        """Add a document to the index"""
+        request["id"] = str(uuid.uuid4())  # Add GUID as string to the document
+        response = self.search_client.upload_documents(documents=[request])
+        count = len(response)
+        print(f"Added {count} document(s)")
+        return request["id"]        
