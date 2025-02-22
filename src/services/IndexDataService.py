@@ -79,4 +79,14 @@ class IndexDataService:
         response = self.search_client.upload_documents(documents=[request])
         count = len(response)
         print(f"Added {count} document(s)")
-        return request["id"]        
+        return request["id"]    
+
+    #--------------------------------------------------------------------------------
+    def update_document(self, request: dict):
+        """Update a document in the index"""
+        key_field_name = "id"
+        #request[key_field_name] = key_field_name
+        response = self.search_client.upload_documents(documents=[request])
+        count = len(response)
+        print(f"Updated {count} document(s) with id '{request[key_field_name]}'")
+        return count       

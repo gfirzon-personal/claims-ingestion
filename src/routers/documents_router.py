@@ -77,3 +77,21 @@ def add_document(index_name: str, request: dict, response: Response):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+#--------------------------------------------------------------------------------
+@router.put("/index/{index_name}/")
+def add_document(index_name: str, request: dict, response: Response):
+    """Add a document to the index"""
+    try:
+        if not index_name:
+            raise HTTPException(status_code=400, detail="Invalid input")   
+
+        doc_id = IndexDataService(index_name).update_document(request)
+        
+        response.status_code = 201
+        return {
+            "index": index_name,
+            "result": doc_id
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))    
+    
