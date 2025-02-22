@@ -5,15 +5,20 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy the requirements.txt to the working directory
-COPY requirements.txt /app/
+COPY requirements.txt .
+
+# Update pip to the latest version
+RUN pip install --no-cache-dir --upgrade pip
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code to the working directory
-COPY src /app
+# COPY src /app
+# COPY .env /app
 
-COPY .env /app
+COPY src .
+COPY .env .
 
 # Expose the port FastAPI runs on
 EXPOSE 8000
