@@ -2,6 +2,7 @@ azure-search-documents
 azure-storage-blob
 faker
 fastapi
+confluent-kafka==2.8.0
 pandas
 python-dotenv
 requests

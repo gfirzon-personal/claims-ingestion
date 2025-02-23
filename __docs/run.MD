@@ -10,3 +10,5 @@ This is the simplest way to run a NON_DOCKERIZED Python application inside the v
 pipenv run python src/main.py
 pipenv run python __datagen/generator.py
 ```
+
+Running app in Docker
