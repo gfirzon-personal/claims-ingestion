@@ -6,6 +6,7 @@ docker run -d --name kafka -p 9092:9092 -e ALLOW_PLAINTEXT_LISTENER=yes bitnami/
 
 Then test Kafka:
 
+### List existing topics
 ```sh
 docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
@@ -20,6 +21,7 @@ docker network create kafka-network
 docker network create kafka-net
 ```
 
+### Run kafka (with no volume) - Verified!!!
 ```sh
 docker run -d --name kafka --network kafka-net `
   -p 9092:9092 -p 9093:9093 `
@@ -33,8 +35,10 @@ docker run -d --name kafka --network kafka-net `
   bitnami/kafka
 ```
 
+```sh
 docker stop kafka
 docker rm kafka
+```sh
 
 $HOST_IP = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -like "*Ethernet*" -or $_.InterfaceAlias -like "*Wi-Fi*" }).IPAddress
 echo $HOST_IP
