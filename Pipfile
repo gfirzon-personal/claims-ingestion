@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 fastapi = "*"
+confluent-kafka = "==2.8.0"
 uvicorn = "*"
 requests = "*"
 python-dotenv = "*"
