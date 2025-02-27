@@ -5,34 +5,7 @@ class IndexDataService:
     """Service to manage data for the search index"""
     def __init__(self, index_name: str):
         self.search_client = SearchClientFactory().create(index_name)
-        
-    #--------------------------------------------------------------------------------
-    def delete_all_docs(self):
-        """Delete all documents from the index"""
-        key_field_name = "id"
-
-        # Retrieve all document IDs
-        delete_batch = []
-        for doc in self.search_client.search(search_text="*", select=[key_field_name]):  
-            if key_field_name in doc:  # Ensure key field exists in response
-                delete_batch.append({
-                    "@search.action": "delete",
-                    key_field_name: doc[key_field_name]
-                })
-
-        count = 0
-
-        # Execute batch delete if documents exist
-        if delete_batch:
-            response = self.search_client.upload_documents(documents=delete_batch)
-            count = len(response)
-            print(f"Deleted {count} documents")
-            # print("Deleted documents:", response)
-        else:
-            print("No documents found in index.") 
-
-        return count    
-    
+           
     #--------------------------------------------------------------------------------
     def get_all_docs(self):
         """Retrieve all documents from the index"""
@@ -48,7 +21,26 @@ class IndexDataService:
         for doc in results:
             return doc
         print(f"No document found with id '{doc_id}'")
-        return None
+        return None 
+        
+    #--------------------------------------------------------------------------------
+    def add_document(self, request: dict):
+        """Add a document to the index"""
+        request["id"] = str(uuid.uuid4())  # Add GUID as string to the document
+        response = self.search_client.upload_documents(documents=[request])
+        count = len(response)
+        print(f"Added {count} document(s)")
+        return request["id"]    
+
+    #--------------------------------------------------------------------------------
+    def update_document(self, request: dict):
+        """Update a document in the index"""
+        key_field_name = "id"
+        #request[key_field_name] = key_field_name
+        response = self.search_client.upload_documents(documents=[request])
+        count = len(response)
+        print(f"Updated {count} document(s) with id '{request[key_field_name]}'")
+        return count       
     
     #--------------------------------------------------------------------------------
     def delete_doc_by_id(self, doc_id: str):
@@ -71,22 +63,34 @@ class IndexDataService:
             return count
         else:
             print(f"No document found with id '{doc_id}'")
-            return 0    
+            return 0       
+        
     #--------------------------------------------------------------------------------
-    def add_document(self, request: dict):
-        """Add a document to the index"""
-        request["id"] = str(uuid.uuid4())  # Add GUID as string to the document
-        response = self.search_client.upload_documents(documents=[request])
-        count = len(response)
-        print(f"Added {count} document(s)")
-        return request["id"]    
-
-    #--------------------------------------------------------------------------------
-    def update_document(self, request: dict):
-        """Update a document in the index"""
+    def delete_all_docs(self):
+        """Delete all documents from the index"""
         key_field_name = "id"
-        #request[key_field_name] = key_field_name
-        response = self.search_client.upload_documents(documents=[request])
-        count = len(response)
-        print(f"Updated {count} document(s) with id '{request[key_field_name]}'")
-        return count       
+        batch_size = 1000  # Adjust the batch size as needed
+
+        count = 0
+
+        while True:
+            # Retrieve a batch of document IDs
+            delete_batch = []
+            for doc in self.search_client.search(search_text="*", select=[key_field_name], top=batch_size):
+                if key_field_name in doc:  # Ensure key field exists in response
+                    delete_batch.append({
+                        "@search.action": "delete",
+                        key_field_name: doc[key_field_name]
+                    })
+
+            # Execute batch delete if documents exist
+            if delete_batch:
+                response = self.search_client.upload_documents(documents=delete_batch)
+                count += len(response)
+                print(f"Deleted {len(response)} documents in this batch")
+            else:
+                print("No more documents found in index.")
+                break
+
+        print(f"Deleted a total of {count} documents")
+        return count      

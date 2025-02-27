@@ -40,19 +40,3 @@ def load_index(request: LoadIndexRequest, response: Response):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))  
     
-#--------------------------------------------------------------------------------    
-@router.delete("/{index_name}")
-def delete_index_data(index_name: str, response: Response):
-    try:
-        if not index_name:
-            raise HTTPException(status_code=400, detail="Invalid input")     
-        
-        count = IndexDataService(index_name).delete_all_docs()
-        
-        response.status_code = 201
-        return {
-            "message": f"Deleted {count} documents from index {index_name}"
-        }
-    
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))  
