@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import (health_router,
@@ -10,6 +11,9 @@ from routers import (health_router,
     parser_router)
 
 app = FastAPI(title = "claims injestion for dedup api", description = "tbd", version = "0.1")
+
+# Set up logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Configure CORS
 app.add_middleware(

@@ -1,3 +1,4 @@
+import logging
 import csv
 from io import StringIO
 import uuid
@@ -60,6 +61,8 @@ class IndexLoadingService:
 
     def load(self, index_name: str, index_type: str, container_name: str, blob_name: str, stream_mode: bool = False):
         """Load data into the search index from a blob storage"""
+
+        logging.info(f"Loading data from blob: container_name={container_name}, blob_name={blob_name}")
         self.search_client = SearchClientFactory().create(index_name)
 
         if index_type == "test":
@@ -81,6 +84,8 @@ class IndexLoadingService:
                 #return "Data loaded successfully"
             else:
                 content = BlobClientService(container_name, blob_name).read_blob_file()
+                logging.info(f"Retrieved content from blob: container_name={container_name}, blob_name={blob_name} - {len(content)} bytes")
+
                 data_list = BatchCsvParsingService().get_data_from_content(content)
                 filtered_data = self.filter(data_list)
 

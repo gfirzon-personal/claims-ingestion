@@ -1,3 +1,4 @@
+import logging
 from azure.storage.blob import BlobServiceClient
 
 from utils import config
@@ -11,16 +12,20 @@ AZURITE_CONNECTION_STRING = (
     f"BlobEndpoint={config_dict['AZURITE_BLOB_ENDPOINT']};"
 )
 
-use_azurite = config_dict['USE_AZURITE']
+use_azurite = config_dict['USE_AZURITE'].lower() == 'true'
 
 class BlobServiceClientFactory:
     """Factory class to create a BlobServiceClient object"""
     def __init__(self):
+        #logging.info(f"Initializing BlobServiceClientFactory using azurite={use_azurite}")
+
         if use_azurite:
             # Use Azurite settings
+            logging.info(f"Using azurite as blob storage")
             self.connection_string = AZURITE_CONNECTION_STRING
         else:
             # Use Azure storage settings
+            logging.info(f"Using Azure as blob storage")
             self.connection_string = config_dict['STORAGE_ACCOUNT_CONNECTIONSTRING']
 
     def create(self) -> BlobServiceClient:

@@ -5,9 +5,10 @@ from azure.core.credentials import AzureKeyCredential
 
 class SearchClientFactory:
     def __init__(self):
-        pass
+        ...
 
     def create(self, index_name: str) -> SearchClient:
+        """Create a SearchClient instance"""
         load_dotenv()
         search_service_endpoint = os.getenv("SEARCH_SERVICE_ENDPOINT")
         search_service_key = os.getenv("SEARCH_SERVICE_KEY")   
