@@ -1,11 +1,11 @@
-azure-search-documents
-azure-storage-blob
-faker
-fastapi
+azure-search-documents==11.5.2
+azure-storage-blob==12.24.1
+faker==36.1.1
+fastapi==0.115.8
 confluent-kafka==2.8.0
-pandas
-python-dotenv
-requests
+pandas==2.2.3
+python-dotenv==1.0.1
+requests==2.32.3
 # Sentence Transformers: Multilingual Sentence, Paragraph, and Image Embeddings using BERT & Co.
-sentence-transformers
-uvicorn
+sentence-transformers==3.4.1
+uvicorn==0.34.0

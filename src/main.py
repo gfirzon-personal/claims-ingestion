@@ -1,14 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import (index_schema_router, 
-                     index_data_router, 
-                     import_router,
-                     searching_router,
-                     documents_router,
-                     testing_router,
-                     parser_router)
+from routers import (health_router,
+    index_schema_router, 
+    index_data_router, 
+    import_router,
+    searching_router,
+    documents_router,
+    testing_router,
+    parser_router)
 
-app = FastAPI(title = "dedup api")
+app = FastAPI(title = "claims injestion for dedup api", description = "tbd", version = "0.1")
 
 # Configure CORS
 app.add_middleware(
@@ -19,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
  
+app.include_router(health_router.router, prefix = "/health", tags = ["health"])
 app.include_router(index_schema_router.router, prefix = "/index-schema", tags = ["index-schema"])
 app.include_router(index_data_router.router, prefix = "/index-data", tags = ["index-data"])
 app.include_router(import_router.router, prefix = "/importing", tags = ["importing"])
