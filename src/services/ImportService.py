@@ -1,4 +1,5 @@
 import uuid
+import logging
 from datetime import datetime
 from services import SearchingService
 from models.PharmaRecord import PharmaRecord
@@ -6,19 +7,20 @@ from models.PharmaRecord import PharmaRecord
 from services.BlobClientService import BlobClientService
 from services.BatchCsvParsingService import BatchCsvParsingService
 
-# from services import (BlobClientService, BatchCsvParsingService)
-
 from providers.pharma_docs_provider import (
     get_docs, 
     get_blob_docs, 
     get_required_attributes)
 
+#--------------------------------------------------------------------------------
 class ImportService:
     """Service to import data"""
 
+    #--------------------------------------------------------------------------------
     def __init__(self):
-        pass
+        ...
     
+    #--------------------------------------------------------------------------------
     def import_file(self, index_name: str, container_name: str, blob_name: str, out_container_name: str):
         content = BlobClientService(container_name, blob_name).read_blob_file()
 
@@ -61,6 +63,7 @@ class ImportService:
             "total_rec_count": new_rec_count + dup_rec_count
         }    
        
+    #--------------------------------------------------------------------------------
     def filter(self, data):
         # List of required attributes
         required_attributes = get_required_attributes()       

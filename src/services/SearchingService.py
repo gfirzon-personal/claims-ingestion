@@ -1,5 +1,6 @@
 import requests
 import json
+import logging
 from factories.SearchClientFactory import SearchClientFactory
 from services.EmbeddingsService import EmbeddingsService
 from utils import config
@@ -8,6 +9,7 @@ from models.PharmaRecord import PharmaRecord
 class SearchingService:
     """Service to search data in the index"""
     
+    #------------------------------------------------------------------------------------------------
     def __init__(self, index_name: str):
         self.embeddings_service = EmbeddingsService()
         self.search_client = SearchClientFactory().create(index_name)
@@ -17,6 +19,7 @@ class SearchingService:
         self.search_service_api_version = config_dict['SEARCH_SERVICE_API_VERSION']
         self.search_service_key = config_dict['SEARCH_SERVICE_KEY']
 
+    #------------------------------------------------------------------------------------------------
     def search(self, query: str):
         #query_filter = f"email eq '{record['email']}' and name eq '{record['name']}'"
         query_filter = f"content eq '{query}'"
@@ -30,6 +33,7 @@ class SearchingService:
 
         return query
     
+    #------------------------------------------------------------------------------------------------
     def record_search(self, record: PharmaRecord):
         """Search for a record in the index (which has been setup in ctor)"""
 
@@ -54,6 +58,7 @@ class SearchingService:
             "results": service_results
         }   
     
+    #------------------------------------------------------------------------------------------------
     def build_query_filter(self, record: PharmaRecord):
         query_filter = " and ".join([
             f"{field} eq '{getattr(record, field)}'" if getattr(record, field) is not None else f"{field} eq null"
@@ -89,7 +94,7 @@ class SearchingService:
                 {
                     "kind": "vector",
                     "vector": query_vector,
-                    "exhaustive": True,
+                    "exhaustive": False,
                     "fields": "content_vector",
                     "k": top_k
                 }
@@ -126,21 +131,50 @@ class SearchingService:
         return service_result
     
     #---------------------------------------------------------------------------------------
-    def foo(self, index_name: str, query: str):
-        search_client = SearchClientFactory().create(index_name)
+    # https://stackoverflow.com/questions/79328696/azure-cognitive-vector-search-query-and-index-creation
+
+    def hybrid_search(self, query_text: str):
+        """Perform a hybrid search using both keyword search and vector search"""
+        logging.info(f"Performing hybrid search for: {query_text}")
 
         # Generate a query vector using the EmbeddingsService
-        query_vector = self.embeddings_service.get_embeddings(query).tolist()
+        # Note! The number of dimensions must match the vector field definition in Azure AI Search.
+        vector_embedding = self.embeddings_service.get_embeddings(query_text).tolist()
 
-        # Perform vector search using the 'content_vector' field
+        #logging.info(f"query_vector: {query_vector}")
+        if not vector_embedding or not isinstance(vector_embedding, list):
+            raise ValueError("Vector embedding is missing or not a valid list")
+
         # The k parameter specifies the number of nearest neighbors to return
-        results = search_client.search(
-            search_text="",
+        search_results = self.search_client.search(
+            search_text=query_text, # Keyword search
             #vectors=[{"fieldName": "content_vector", "vector": query_vector, "k": 10}]
-            vector={"fieldName": "content_vector", "value": query_vector, "k": 10}
+            #vector={"fieldName": "content_vector", "value": query_vector, "k": 10}
+            vector_queries=[{
+                #"value": vector_embedding,
+                "vector": vector_embedding,
+                "kind": "vector",  # Required for vector queries
+                #"exhaustive": False,  # If true, Return all results, sorted by similarity
+                #"similarity": "cosine",  # Similarity measure to use
+                "k": 5,  # Number of vector search results
+                "fields": "content_vector"  # The field where the vector embeddings are stored
+            }],
+            select=["id", "content"],  # Fields to return
+            top=10,  # Total results including both keyword and vector search
         )    
 
-        for result in results:
-            print("Found:", result)
+        # Display results
+        # for result in search_results:
+        #     print(f"ID: {result['id']}, Content: {result['content']}, Score: {result['@search.score']}")
+        results_list = []
+        for result in search_results:
+            results_list.append({
+                "ID": result['id'],
+                "Content": result['content'],
+                "Score": result['@search.score']
+            })
 
-        return query
+        return {
+            "query_text": query_text,
+            "results": results_list
+        }

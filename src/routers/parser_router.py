@@ -7,6 +7,7 @@ from services import BatchCsvParsingService
 
 router = APIRouter()
 
+#------------------------------------------------------------------------------------------------
 @router.get("/headers/")
 @router.get("/headers")
 def get_headers(response: Response):
@@ -22,6 +23,7 @@ def get_headers(response: Response):
         response.status_code = 500
         return {"error": str(e)}    
    
+#------------------------------------------------------------------------------------------------
 @router.get("/data/")
 @router.get("/data")
 def get_data(response: Response):
