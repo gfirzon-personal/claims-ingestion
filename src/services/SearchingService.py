@@ -148,8 +148,6 @@ class SearchingService:
         # The k parameter specifies the number of nearest neighbors to return
         search_results = self.search_client.search(
             search_text=query_text, # Keyword search
-            #vectors=[{"fieldName": "content_vector", "vector": query_vector, "k": 10}]
-            #vector={"fieldName": "content_vector", "value": query_vector, "k": 10}
             vector_queries=[{
                 #"value": vector_embedding,
                 "vector": vector_embedding,
