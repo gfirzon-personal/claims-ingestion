@@ -2,3 +2,5 @@
 
 Url: http://localhost:8000/documents/index/pharma-index/stats
 Method: GET
+
+Note: Take a while for Azure AI Search service to update stats

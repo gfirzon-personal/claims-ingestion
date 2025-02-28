@@ -10,7 +10,7 @@ from azure.search.documents.indexes.models import (
     VectorSearchAlgorithmConfiguration
 )
 
-def get_pharma_search_params(vector_search_profile_name:str, algorithm_configuration_name:str):
+def get_pharma_search_params(vector_search_profile_name: str, algorithm_configuration_name: str):
     #vector_search_dimensions = 1536
     vector_search_dimensions = 384
     
@@ -34,7 +34,8 @@ def get_pharma_search_params(vector_search_profile_name:str, algorithm_configura
         SearchableField(name="OtherCoverageCode", type=SearchFieldDataType.String, filterable=True),
         SearchableField(name="PatientPayAmount", type=SearchFieldDataType.String, filterable=True),
         SearchableField(name="TotalAmountPaid", type=SearchFieldDataType.String, filterable=True),
-        #SearchableField(name="content", type=SearchFieldDataType.String, filterable=True),  # Make 'content' both searchable and filterable
+        # intention is to store entire csv record in 'content' field
+        SearchableField(name="content", type=SearchFieldDataType.String, filterable=True),  # Make 'content' both searchable and filterable
         SearchField(name="content_vector", 
                     type=SearchFieldDataType.Collection(SearchFieldDataType.Single),
                     searchable=True, 
