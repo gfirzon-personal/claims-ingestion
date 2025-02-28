@@ -82,6 +82,7 @@ def read_blob_file(container_name: str, blob_name: str, response: Response):
         response.status_code = 500
         return {"error": str(e)}     
 
+#------------------------------------------------------------------------------------------------
 @router.get("/storage/blobs/{container_name}/stream/{blob_name}")
 @router.get("/storage/blobs/{container_name}/stream/{blob_name}/")
 def stream_blob_file(container_name: str, blob_name: str, response: Response):
@@ -93,6 +94,7 @@ def stream_blob_file(container_name: str, blob_name: str, response: Response):
         response.status_code = 500
         return {"error": str(e)}     
 
+#------------------------------------------------------------------------------------------------
 @router.get("/storage/blobs/{container_name}/stream2/{blob_name}")
 @router.get("/storage/blobs/{container_name}/stream2/{blob_name}/")
 def stream_blob_file(container_name: str, blob_name: str, response: Response):

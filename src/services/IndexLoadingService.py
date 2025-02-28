@@ -89,9 +89,13 @@ class IndexLoadingService:
                 data_list = BatchCsvParsingService().get_data_from_content(content)
                 filtered_data = self.filter(data_list)
 
+                embedding_service = EmbeddingsService()
                 for doc in filtered_data:
                     doc["content"] = IndexLoadingService.concatenate_doc_values(doc)
                     doc["id"] = str(uuid.uuid4())  # Add GUID as string to the document
+
+                    embedding = embedding_service.get_embeddings(doc["content"]).tolist()
+                    doc["content_vector"] = embedding  # Add embedding to the document
 
                 result = self.search_client.upload_documents(documents=filtered_data)
                 return len(filtered_data)

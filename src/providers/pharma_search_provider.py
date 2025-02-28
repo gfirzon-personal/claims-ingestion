@@ -39,6 +39,8 @@ def get_pharma_search_params(vector_search_profile_name: str, algorithm_configur
         SearchField(name="content_vector", 
                     type=SearchFieldDataType.Collection(SearchFieldDataType.Single),
                     searchable=True, 
+                    retrievable=True,
+                    hidden=False,
                     vector_search_dimensions=vector_search_dimensions, 
                     vector_search_profile_name=vector_search_profile_name)
     ]

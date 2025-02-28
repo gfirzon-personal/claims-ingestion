@@ -1,3 +1,4 @@
+import logging
 import uuid
 from factories.SearchClientFactory import SearchClientFactory
 from factories.SearchIndexClientFactory import SearchIndexClientFactory
@@ -19,8 +20,9 @@ class IndexDataService:
             all_docs.append(doc)
         return all_docs   
     
+    #--------------------------------------------------------------------------------
     def get_doc_by_id(self, doc_id: str):
-        """Retrieve a document from the index by ID"""
+        """Retrieve document from the index by ID"""
         results = self.search_client.search(search_text="*", filter=f"id eq '{doc_id}'")
         for doc in results:
             return doc
@@ -38,7 +40,7 @@ class IndexDataService:
 
     #--------------------------------------------------------------------------------
     def update_document(self, request: dict):
-        """Update a document in the index"""
+        """Update existing document in the index"""
         key_field_name = "id"
         #request[key_field_name] = key_field_name
         response = self.search_client.upload_documents(documents=[request])
@@ -105,3 +107,15 @@ class IndexDataService:
         stats = self.search_index_client.get_index_statistics(self.index_name)
         #print(f"Index statistics: {stats}")
         return stats    
+    
+    #--------------------------------------------------------------------------------
+    def get_document_embeddings(self, document_id: str):
+        """Retrieve document embeddings from the index by document ID"""
+
+        results = self.search_client.get_document(key=document_id)
+        #logging.info(f"Results: {results}")
+
+        embedding_field_name = "content_vector"  
+        embedding = results.get(embedding_field_name) 
+
+        return embedding       

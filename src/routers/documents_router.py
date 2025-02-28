@@ -128,3 +128,21 @@ def get_index_statistics(index_name: str, response: Response):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))        
+    
+#--------------------------------------------------------------------------------
+@router.get("/index/{index_name}/id/{doc_id}/embeddings")
+def get_embeddings(index_name: str, doc_id: str,  response: Response):
+    """Retrieve document embeddings from the index by document ID"""
+    try:
+        if not index_name or not doc_id:
+            raise HTTPException(status_code=400, detail="Invalid input")   
+
+        embeddings = IndexDataService(index_name).get_document_embeddings(doc_id)
+        
+        response.status_code = 201
+        return {
+            "index": index_name,
+            "result": embeddings
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))       
