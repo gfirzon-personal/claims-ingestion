@@ -93,7 +93,7 @@ class IndexLoadingService:
                     doc["id"] = str(uuid.uuid4())  # Add GUID as string to the document
 
                 result = self.search_client.upload_documents(documents=filtered_data)
-                return result
+                return len(filtered_data)
 
             # documents = get_docs("azure")
             # for doc in documents:

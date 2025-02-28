@@ -1,10 +1,14 @@
 import uuid
 from factories.SearchClientFactory import SearchClientFactory
+from factories.SearchIndexClientFactory import SearchIndexClientFactory
 
 class IndexDataService:
     """Service to manage data for the search index"""
     def __init__(self, index_name: str):
         self.search_client = SearchClientFactory().create(index_name)
+        self.search_index_client = SearchIndexClientFactory.create_search_index_client()
+
+        self.index_name = index_name
            
     #--------------------------------------------------------------------------------
     def get_all_docs(self):
@@ -94,3 +98,10 @@ class IndexDataService:
 
         print(f"Deleted a total of {count} documents")
         return count      
+    
+    #--------------------------------------------------------------------------------
+    def get_index_statistics(self):
+        """Retrieve statistics for the index"""
+        stats = self.search_index_client.get_index_statistics(self.index_name)
+        #print(f"Index statistics: {stats}")
+        return stats    

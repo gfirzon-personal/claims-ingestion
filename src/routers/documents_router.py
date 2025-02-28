@@ -111,3 +111,20 @@ def delete_index_data(index_name: str, response: Response):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))      
+    
+#--------------------------------------------------------------------------------    
+@router.get("/index/{index_name}/stats")
+def get_index_statistics(index_name: str, response: Response):
+    try:
+        if not index_name:
+            raise HTTPException(status_code=400, detail="Invalid input")     
+        
+        stats = IndexDataService(index_name).get_index_statistics()
+        
+        response.status_code = 201
+        return {
+            "stats": stats
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))        

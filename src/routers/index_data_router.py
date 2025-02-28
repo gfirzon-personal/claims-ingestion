@@ -22,7 +22,7 @@ def load_index(request: LoadIndexRequest, response: Response):
         if request.index_type == "pharma" and not request.container_name or not request.blob_name:
             raise HTTPException(status_code=400, details="Invalid input")   
 
-        result = IndexLoadingService().load(
+        count = IndexLoadingService().load(
             request.index_name, 
             request.index_type,
             container_name=request.container_name,
@@ -34,8 +34,10 @@ def load_index(request: LoadIndexRequest, response: Response):
         return {
             #"message": f"Index loaded successfully with {len(result)} documents", 
             "index_name": request.index_name,
-            "result": result
+            "result": {
+                "DocumentsCreated": count
             }
+        }
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))  
