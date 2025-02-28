@@ -90,6 +90,7 @@ class IndexLoadingService:
                 filtered_data = self.filter(data_list)
 
                 for doc in filtered_data:
+                    doc["content"] = IndexLoadingService.concatenate_doc_values(doc)
                     doc["id"] = str(uuid.uuid4())  # Add GUID as string to the document
 
                 result = self.search_client.upload_documents(documents=filtered_data)
@@ -113,7 +114,7 @@ class IndexLoadingService:
         #return result
     
     def concatenate_doc_values(doc):
-        return ''.join(str(value) for value in doc.values())
+        return ' | '.join(str(value) for value in doc.values())
     
     def filter(self, data):
         # List of required attributes
