@@ -49,6 +49,10 @@ class SearchingService:
         service_results = []
         for result in results:
             #print("Found:", result)
+            # Remove the content_vector field if it exists
+            if "content_vector" in result:
+                del result["content_vector"]            
+
             result_count += 1
             service_results.append(result)
 
@@ -158,6 +162,7 @@ class SearchingService:
                 "fields": "content_vector"  # The field where the vector embeddings are stored
             }],
             select=["id", "content"],  # Fields to return
+            #scoring_profile="hybrid_boost",  # Use the scoring profile defined in the index
             top=10,  # Total results including both keyword and vector search
         )    
 

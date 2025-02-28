@@ -38,7 +38,7 @@ def record_text_search(request: RecordSearchRequest, response: Response):
         if not request.record or not request.index_name:
             raise HTTPException(status_code=400, detail="Invalid input")
 
-        result = SearchingService().record_search(request.index_name, request.record)
+        result = SearchingService(request.index_name).record_search(request.record)
         #result = request.record
         
         response.status_code = 201
