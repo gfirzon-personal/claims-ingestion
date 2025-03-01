@@ -1,7 +1,6 @@
-from confluent_kafka import Producer
 import json
 import time
-
+from confluent_kafka import Producer
 
 ### If Kafka is running inside Docker but your script is running outside, 
 # replace localhost with the correct host (host.docker.internal or the container IP).
