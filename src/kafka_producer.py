@@ -30,6 +30,8 @@ def acked(err, msg):
 
 # Function to produce messages
 def produce_messages():
+    """Produce messages to Kafka topic"""
+
     for i in range(10):
         key = f"key-{i}"
         value = json.dumps({"index": i, "message": f"Hello Kafka {i}"})
@@ -43,5 +45,6 @@ def produce_messages():
 
     producer.flush()  # Ensure all messages are delivered
 
+# ---------------------------------------------
 if __name__ == "__main__":
     produce_messages()

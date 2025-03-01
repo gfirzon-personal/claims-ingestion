@@ -1,6 +1,6 @@
 Build Docker image
 ```sh
-docker build -t claims-injestion-image .
+docker build -t claims-injestion-image . && docker image prune -f
 ```
 
 Run the docker container using the image
